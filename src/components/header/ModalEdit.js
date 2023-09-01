@@ -26,12 +26,11 @@ function ModalEdit(props) {
   };
   const handleEditUser = async () => {
     try {
-      let res = await PutUpdate(dataUserEdit.id_ad,e_mail, name, pass_word)
+      let res = await PutUpdate(dataUserEdit.id_ad,pass_word, name,)
       if (res && res.data) {
         handleClose();
-        setName('');
-        set_e_mail('');
         set_pass_word('');
+        setName('');
         // window.onload();
         window.location.reload();
         toast.success("Create success")
@@ -63,8 +62,7 @@ function ModalEdit(props) {
             <div className="form-group">
               <label>Email address</label>
               <input type="email" className="form-control" placeholder="Enter email" readOnly
-                value={e_mail}
-                onChange={(event) => set_e_mail(event.target.value)} />
+                value={e_mail} />
             </div>
             <div className="form-group">
               <label>Name</label>
