@@ -42,7 +42,7 @@ function Store() {
     setSortBy(sortBy);
     setSortField(sortField);
     const sortedStore = _.orderBy(listStore, [sortField], [sortBy]);
-    setTypeFilter("all");
+    // setTypeFilter("all");
     setListStore(sortedStore);
     // console.log(sortedStore);
   }

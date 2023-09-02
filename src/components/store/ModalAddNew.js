@@ -11,7 +11,6 @@ function ModalAddNew(props) {
   const [price, set_price] = useState('');
   const [name, set_name] = useState('');
   const [typename, set_typename] = useState(''); // Mặc định là trống
-  const [size, set_size] = useState('');
 
   const handleSaveUser = async () => {
     try {
@@ -26,7 +25,6 @@ function ModalAddNew(props) {
       formData.append('price_value', price);
       formData.append('image_name', name);
       formData.append('type_name', typename);
-      formData.append('size_value', size);
 
       const res = await PostCreate(formData);
 
@@ -37,7 +35,6 @@ function ModalAddNew(props) {
         set_img_hover_file(null);
         set_price('');
         set_typename('');
-        set_size('');
         toast.success('Create success');
       } else {
         toast.error('Error!');

@@ -1,42 +1,61 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Chart from "react-apexcharts";
 import ReactApexChart from 'react-apexcharts';
 import { Container, Row, Col } from 'react-bootstrap';
-
+import { FetchAll } from '../../Services/DashboardService';
 function Dashboard() {
-  const [data, setData] = useState([
-    { month: "2023-04", nam: 50, nu: 100, total: 150, nam_product: 45, nu_product: 50, total_product: 95 },
-    { month: "2023-05", nam: 80, nu: 130, total: 210, nam_product: 45, nu_product: 50, total_product: 95 },
-    { month: "2023-06", nam: 70, nu: 110, total: 180, nam_product: 45, nu_product: 50, total_product: 95 },
-    { month: "2023-07", nam: 70, nu: 110, total: 81, nam_product: 45, nu_product: 50, total_product: 95 },
-    { month: "2023-08", nam: 70, nu: 110, total: 180, nam_product: 45, nu_product: 50, total_product: 95 },
-    // Thêm dữ liệu cho các ngày khác trong tháng ở đây
-  ]);
+  const [data, setData] = useState([]);
+  const [listdashboard, setListdashboard] = useState([]);
+  const [originalListdashboard, setOriginalListdashboard] = useState([]);
 
-  // Tính tổng nam_product và nu_product từ mảng data
-  const totalNamProduct = data.reduce((acc, item) => acc + item.nam_product, 0);
-  const totalNuProduct = data.reduce((acc, item) => acc + item.nu_product, 0);
-  // Tính tổng nam_price và nu_price từ mảng data
-  const totalNamprice = data.reduce((acc, item) => acc + item.nam, 0);
-  const totalNuprice = data.reduce((acc, item) => acc + item.nu, 0);
+  useEffect(() => {
+    getdashboard();
+  }, []);
+
+  const getdashboard = async () => {
+    try {
+      const res = await FetchAll();
+      const resData = res.data;
+
+      setListdashboard(resData);
+      setOriginalListdashboard(resData);
+      setData(resData.map(item => ({
+        label: item.label,
+        men_price: item.men_price,
+        women_price: item.women_price,
+        total: item.men_price + item.women_price,
+        men_product: item.men_product,
+        women_product: item.women_product,
+        total_product: item.men_product + item.women_product
+      })));
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+    }
+  };
+
+  const totalmenProduct = data.reduce((acc, item) => acc + item.men_product, 0);
+  const totalwomenProduct = data.reduce((acc, item) => acc + item.women_product, 0);
+  const totalmenprice = data.reduce((acc, item) => acc + item.men_price, 0);
+  const totalwomenprice = data.reduce((acc, item) => acc + item.women_price, 0);
 
   const chartData_product = {
     options: {
       chart: {
         type: 'pie',
       },
-      labels: ['Nam Product', 'Nữ Product'],
+      labels: ['men Product', 'women Product'],
     },
-    series: [totalNamProduct, totalNuProduct],
+    series: [totalmenProduct, totalwomenProduct],
   };
+
   const chartData_price = {
     options: {
       chart: {
         type: 'pie',
       },
-      labels: ['Nam price', 'Nữ price'],
+      labels: ['men price', 'women price'],
     },
-    series: [totalNamprice, totalNuprice],
+    series: [totalmenprice, totalwomenprice],
   };
 
   return (
@@ -44,7 +63,7 @@ function Dashboard() {
       <Container>
         <div className="App_value">
           <h1>
-          Chart of clothes sold in a year by month{" "}
+            Chart of clothes sold in a year by label{" "}
             <i className="fas fa-user"></i>{" "}
           </h1>
           <Row>
@@ -57,12 +76,12 @@ function Dashboard() {
                         id: "basic-bar",
                       },
                       xaxis: {
-                        categories: data.map(item => item.month),
+                        categories: data.map(item => item.label),
                       },
                     }}
                     series={[
                       {
-                        name: "total",
+                        name: "total price",
                         data: data.map(item => item.total),
                       },
                       {
