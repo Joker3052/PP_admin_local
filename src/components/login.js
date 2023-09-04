@@ -46,6 +46,11 @@ const Login =()=>
         }
         setLoadingApi(false);
     }
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter' && e_mail && pass_word) {
+          handleLogin();
+        }
+      };
     const handleGoBack =()=>
     {
         navigate("/");
@@ -57,12 +62,14 @@ const Login =()=>
         <div className="text">Email and password</div>
         <input id="text-email" type="text" placeholder="enter email" 
         value={e_mail}
+        onKeyPress={handleKeyPress}
         onChange={(event)=>set_e_mail(event.target.value)}
         />
        <div className="input-pass">
        <input id="text-email" type={isShowPassWord===true?"text": "password"} 
        placeholder="enter password"
        value={pass_word}
+       onKeyPress={handleKeyPress}
        onChange={(event)=>set_pass_word(event.target.value)}
        />
        <i className={isShowPassWord===true?"fa-solid fa-eye":"fa-solid fa-eye-slash"}

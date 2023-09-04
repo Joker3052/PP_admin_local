@@ -2,8 +2,14 @@
 import {useContext} from "react"
 import { UserContext } from '../context/UserContext';
 import {Alert} from 'react-bootstrap'
+import { useNavigate } from "react-router-dom";
 const PrivateRoute =(props)=>
 {
+  const navigate = useNavigate();
+  const handleGoLogin =()=>
+  {
+      navigate("/login");
+  }
     const { user } = useContext(UserContext); 
     if(user && !user.auth)
     {
@@ -12,11 +18,12 @@ const PrivateRoute =(props)=>
             <Alert variant="danger" className="mt-3">
             <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
             <p>
-              Change this and that and try again. Duis mollis, est non commodo
-              luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
-              Cras mattis consectetur purus sit amet fermentum.
+            you do not have permission to access this page, please login to continue
             </p>
           </Alert>
+          <div>
+          <button className="btn btn-success" onClick={()=>handleGoLogin()}>Login</button>
+          </div>
             </>
         )
     }

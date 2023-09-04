@@ -75,6 +75,11 @@ function Customer() {
   };
   useEffect(() => {
     getCustomers();
+     // Đặt một khoảng thời gian để gọi lại getCustomers sau mỗi 5 phút (300000ms)
+    const intervalId = setInterval(getCustomers, 300000);
+
+    // Trong useEffect, chúng ta cần trả về một hàm để xử lý khi component unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   const getCustomers = async () => {

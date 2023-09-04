@@ -10,6 +10,11 @@ function Dashboard() {
 
   useEffect(() => {
     getdashboard();
+    // Đặt một khoảng thời gian để gọi lại getCustomers sau mỗi  (3000ms)
+    const intervalId = setInterval(getdashboard, 3000);
+
+    // Trong useEffect, chúng ta cần trả về một hàm để xử lý khi component unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   const getdashboard = async () => {
